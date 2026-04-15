@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phnom Penh Frisbee Day — AUPP Liger Leadership Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --sky-top: #0a1628;
+    --sky-mid: #1a3a6b;
+    --sky-dawn: #e85d26;
+    --sky-gold: #f5a623;
+    --grass: #1d6932;
+    --grass-mid: #2a8c43;
+    --disc-orange: #FF6B1A;
+    --disc-white: #fff8f0;
+    --accent: #FFD166;
+    --red: #C1121F;
+    --text-light: #f0ede6;
+    --text-muted: #b8c4d0;
+    --card-bg: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.13);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--sky-top);
+    color: var(--text-light);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .sky {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg,
+      #060f1f 0%,
+      #0d2142 20%,
+      #1a3a6b 50%,
+      #c04a1a 75%,
+      #f5a020 90%,
+      #ffd27a 100%
+    );
+    z-index: 0;
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes twinkle {
+    0%,100% { opacity: var(--op); transform: scale(1); }
+    50% { opacity: calc(var(--op) * 0.3); transform: scale(0.7); }
+  }
+
+  /* Clouds */
+  .clouds { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .cloud {
+    position: absolute;
+    background: rgba(255,220,150,0.18);
+    border-radius: 50px;
+    filter: blur(12px);
+    animation: drift var(--cdur) linear infinite;
+    animation-delay: var(--cdelay);
+  }
+  @keyframes drift {
+    from { transform: translateX(-200px); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 0.8; }
+    to { transform: translateX(110vw); opacity: 0; }
+  }
+
+  /* Frisbee disc */
+  .disc-wrapper {
+    position: absolute;
+    z-index: 10;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .disc {
+    position: absolute;
+    width: clamp(60px, 12vw, 100px);
+    aspect-ratio: 1;
+    animation: fly 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  }
+  .disc svg { width: 100%; height: 100%; }
+
+  @keyframes fly {
+    0%   { left: -12%; top: 78%; transform: rotate(-20deg) scale(0.5); opacity: 0; }
+    5%   { opacity: 1; }
+    30%  { left: 35%;  top: 28%; transform: rotate(220deg) scale(1.1); }
+    55%  { left: 68%;  top: 18%; transform: rotate(480deg) scale(0.95); }
+    80%  { left: 92%;  top: 42%; transform: rotate(700deg) scale(0.7); opacity: 1; }
+    95%  { left: 108%; top: 55%; transform: rotate(820deg) scale(0.4); opacity: 0; }
+    100% { left: 108%; top: 55%; transform: rotate(820deg) scale(0.4); opacity: 0; }
+  }
+
+  .disc-trail {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,165,50,0.5) 0%, transparent 70%);
+    animation: trail 6s cubic-bezier(0.25,0.46,0.45,0.94) infinite;
+    pointer-events: none;
+    z-index: 9;
+    width: clamp(40px, 9vw, 75px);
+    aspect-ratio: 1;
+    filter: blur(6px);
+  }
+  @keyframes trail {
+    0%   { left: -12%; top: 78%; opacity: 0; }
+    5%   { opacity: 0.7; }
+    30%  { left: 33%;  top: 30%; }
+    55%  { left: 66%;  top: 20%; }
+    80%  { left: 90%;  top: 44%; opacity: 0.4; }
+    100% { left: 108%; top: 57%; opacity: 0; }
+  }
+
+  /* Grass / ground */
+  .ground {
+    position: relative; z-index: 5;
+    width: 100%; flex-shrink: 0;
+  }
+  .grass-svg { display: block; width: 100%; margin-bottom: -2px; }
+
+  .grass-ground {
+    background: var(--grass);
+    padding: 0 1.5rem 2rem;
+    text-align: center;
+    position: relative; z-index: 5;
+  }
+
+  /* Hero text over sky */
+  .hero-content {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 8;
+    padding: clamp(3rem, 10vw, 5rem) 1.5rem 0;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: clamp(11px, 2.5vw, 14px);
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(255,209,102,0.12);
+    border: 1px solid rgba(255,209,102,0.3);
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 16vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-shadow: 0 0 80px rgba(255,120,30,0.5), 0 4px 30px rgba(0,0,0,0.6);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .hero-title span {
+    color: var(--disc-orange);
+    -webkit-text-stroke: 1px rgba(255,200,100,0.4);
+  }
+
+  .hero-sub {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    font-weight: 400;
+    color: rgba(255,240,210,0.9);
+    margin-top: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  .hero-date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 10px 24px;
+    margin-top: 1.5rem;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    font-weight: 600;
+    color: #fff;
+    animation: fadeUp 0.8s ease 0.8s both;
+  }
+  .hero-date-badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--disc-orange);
+    flex-shrink: 0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Grass scene text */
+  .grass-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 5vw, 2rem);
+    color: #c8f0b0;
+    letter-spacing: 0.1em;
+    padding-top: 1rem;
+  }
+
+  .scroll-hint {
+    margin-top: 0.8rem;
+    font-size: 13px;
+    color: rgba(180,240,150,0.6);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: clamp(3rem, 8vw, 5rem) 1.5rem; }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* About */
+  .section-about {
+    background: linear-gradient(180deg, var(--grass) 0%, #163c24 100%);
+  }
+
+  .section-label {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-body {
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    line-height: 1.75;
+    color: rgba(240,235,220,0.85);
+    max-width: 620px;
+  }
+
+  /* Info cards */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .info-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .info-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
+
+  .info-card-icon {
+    font-size: 2rem; margin-bottom: 0.8rem; display: block;
+  }
+
+  .info-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 0.05em;
+    color: var(--accent); margin-bottom: 0.4rem;
+  }
+
+  .info-card-body {
+    font-size: 0.95rem; line-height: 1.6;
+    color: rgba(240,235,220,0.8);
+  }
+
+  /* Detail strip */
+  .section-details {
+    background: #0e1c2f;
+  }
+
+  .details-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .detail-block {
+    flex: 1 1 200px;
+  }
+
+  .detail-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.5rem;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+  }
+
+  .detail-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    line-height: 1.1; color: #fff;
+  }
+
+  .detail-value small {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem; font-weight: 400;
+    display: block; color: rgba(240,235,220,0.65);
+    letter-spacing: 0;
+    margin-top: 0.2rem;
+  }
+
+  /* Activities */
+  .section-activities {
+    background: linear-gradient(180deg, #0e1c2f 0%, #12243a 100%);
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .activity-pill {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,107,26,0.1);
+    border: 1px solid rgba(255,107,26,0.25);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 0.95rem; font-weight: 600;
+    color: rgba(255,220,180,0.95);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .activity-pill:hover { background: rgba(255,107,26,0.2); transform: scale(1.02); }
+  .activity-pill .ap-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--disc-orange); flex-shrink: 0;
+  }
+
+  /* Who it's for */
+  .section-who {
+    background: linear-gradient(180deg, #12243a 0%, #0d1e35 100%);
+  }
+
+  .who-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .who-card {
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .who-card.primary {
+    background: linear-gradient(135deg, #1d6932 0%, #2a8c43 100%);
+    border: 1px solid rgba(80,200,100,0.3);
+  }
+  .who-card.secondary {
+    background: linear-gradient(135deg, #1a3a6b 0%, #254f8a 100%);
+    border: 1px solid rgba(80,140,220,0.3);
+  }
+  .who-card-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .who-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.7rem; letter-spacing: 0.03em;
+    margin-bottom: 0.6rem;
+  }
+  .who-card-body { font-size: 0.95rem; line-height: 1.65; opacity: 0.85; }
+
+  /* About school */
+  .section-school {
+    background: #0a1628;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .school-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .school-logo-area {
+    flex: 0 0 auto;
+    text-align: center;
+  }
+
+  .school-logo-circle {
+    width: clamp(80px, 20vw, 110px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a3a6b, #0a1628);
+    border: 2px solid rgba(255,209,102,0.4);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.9rem, 3vw, 1.15rem);
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-align: center;
+    line-height: 1.3;
+    padding: 10px;
+  }
+
+  .school-info { flex: 1 1 250px; }
+  .school-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+  }
+  .school-name span { color: var(--accent); }
+  .school-desc { font-size: 0.95rem; line-height: 1.7; color: rgba(240,235,220,0.78); }
+
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--disc-orange);
+    color: #fff;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 32px;
+    border-radius: 100px;
+    margin-top: 1.5rem;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 30px rgba(255,107,26,0.35);
+  }
+  .cta-btn:hover { background: #ff8038; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,107,26,0.5); }
+  .cta-btn svg { flex-shrink: 0; }
+
+  /* Footer */
+  footer {
+    background: #060f1f;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .footer-text {
+    font-size: 13px; color: rgba(180,190,200,0.55);
+    line-height: 1.8;
+  }
+  .footer-text a { color: var(--accent); text-decoration: none; }
+  .footer-text a:hover { text-decoration: underline; }
+
+  /* Divider disc motif */
+  .disc-divider {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .disc-divider-line {
+    flex: 1; height: 1px; background: rgba(255,255,255,0.1);
+  }
+  .disc-divider-disc {
+    width: 32px; height: 32px; flex-shrink: 0;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* Map placeholder */
+  .map-placeholder {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+  }
+  .map-placeholder a {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #60a5fa; text-decoration: none; font-weight: 600;
+    font-size: 1rem; margin-top: 0.5rem;
+  }
+  .map-placeholder a:hover { text-decoration: underline; }
+  .map-addr { font-size: 0.9rem; color: rgba(240,235,220,0.65); margin-top: 0.5rem; }
+
+  /* Schedule timeline */
+  .timeline { margin-top: 2rem; }
+  .timeline-item {
+    display: flex; gap: 1.2rem;
+    padding-bottom: 1.5rem;
+    position: relative;
+  }
+  .timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 22px; top: 48px;
+    width: 1px; bottom: 0;
+    background: rgba(255,255,255,0.1);
+  }
+  .tl-time {
+    flex: 0 0 44px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,107,26,0.15);
+    border: 1px solid rgba(255,107,26,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem; color: var(--disc-orange);
+    text-align: center; line-height: 1.2;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .tl-content { padding-top: 8px; }
+  .tl-title {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    color: #fff; margin-bottom: 2px;
+  }
+  .tl-desc { font-size: 0.875rem; color: rgba(240,235,220,0.65); line-height: 1.5; }
+
+</style>
+</head>
+<body>
+
+<!-- ────── HERO ────── -->
+<section class="hero" aria-label="Event hero banner">
+
+  <div class="sky"></div>
+
+  <!-- Stars -->
+  <div class="stars" id="stars" aria-hidden="true"></div>
+
+  <!-- Clouds -->
+  <div class="clouds" id="clouds" aria-hidden="true"></div>
+
+  <!-- Flying frisbee -->
+  <div class="disc-wrapper" aria-hidden="true">
+    <div class="disc-trail"></div>
+    <div class="disc">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="dg" cx="40%" cy="35%">
+            <stop offset="0%" stop-color="#fffaf0"/>
+            <stop offset="60%" stop-color="#FF6B1A"/>
+            <stop offset="100%" stop-color="#c14010"/>
+          </radialGradient>
+          <radialGradient id="dg2" cx="50%" cy="50%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.6)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+        </defs>
+        <!-- Disc body -->
+        <ellipse cx="50" cy="52" rx="46" ry="14" fill="#a83810" opacity="0.4"/>
+        <ellipse cx="50" cy="50" rx="47" ry="16" fill="url(#dg)"/>
+        <!-- Rim detail -->
+        <ellipse cx="50" cy="50" rx="47" ry="16" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <!-- Inner dome -->
+        <ellipse cx="50" cy="46" rx="22" ry="9" fill="#ff9050" opacity="0.5"/>
+        <ellipse cx="50" cy="45" rx="18" ry="7" fill="url(#dg2)" opacity="0.8"/>
+        <!-- Highlight -->
+        <ellipse cx="42" cy="43" rx="6" ry="3" fill="rgba(255,255,255,0.5)" transform="rotate(-15 42 43)"/>
+        <!-- Ring lines -->
+        <ellipse cx="50" cy="50" rx="35" ry="12" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+        <ellipse cx="50" cy="50" rx="25" ry="9" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.8"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Hero text -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">AUPP Liger Leadership Academy Presents</div>
+    <h1 class="hero-title">Phnom Penh<br><span>Frisbee</span><br>Day</h1>
+    <p class="hero-sub">For the Love of the Game &amp; the City</p>
+    <div class="hero-date-badge">
+      <span class="dot"></span>
+      Friday, June 6 · 8:00 AM – 12:00 PM
+      <span class="dot"></span>
+    </div>
+  </div>
+
+  <!-- Ground / grass -->
+  <div class="ground">
+    <svg class="grass-svg" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a8c43"/>
+          <stop offset="100%" stop-color="#1d6932"/>
+        </linearGradient>
+      </defs>
+      <!-- Wavy grass edge -->
+      <path d="M0,60 C80,30 160,80 240,55 C320,30 400,75 480,50 C560,25 640,70 720,45 C800,20 880,65 960,48 C1040,30 1120,72 1200,50 C1280,28 1360,68 1440,48 L1440,120 L0,120 Z" fill="url(#gg)"/>
+      <!-- Grass blades -->
+      <g fill="#3aaa58" opacity="0.7">
+        <path d="M60,65 Q55,30 50,20 Q58,35 65,65Z"/>
+        <path d="M130,58 Q125,25 120,12 Q128,28 135,58Z"/>
+        <path d="M240,52 Q236,22 232,10 Q240,25 248,52Z"/>
+        <path d="M360,60 Q355,28 350,15 Q358,30 366,60Z"/>
+        <path d="M480,52 Q476,20 472,8 Q480,23 488,52Z"/>
+        <path d="M600,58 Q595,26 590,14 Q598,28 606,58Z"/>
+        <path d="M720,50 Q716,18 712,6 Q720,21 728,50Z"/>
+        <path d="M840,55 Q835,23 830,11 Q838,26 846,55Z"/>
+        <path d="M960,52 Q956,20 952,8 Q960,23 968,52Z"/>
+        <path d="M1080,58 Q1075,26 1070,14 Q1078,28 1086,58Z"/>
+        <path d="M1200,54 Q1196,22 1192,10 Q1200,25 1208,54Z"/>
+        <path d="M1340,60 Q1335,28 1330,15 Q1338,30 1346,60Z"/>
+      </g>
+    </svg>
+    <div class="grass-ground">
+      <p class="grass-tagline">🏃 Free · Fun · Open to All</p>
+      <p class="scroll-hint">↓ scroll to explore ↓</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── ABOUT ────── -->
+<section class="section-about" aria-label="About the event">
+  <div class="container reveal">
+    <div class="disc-divider">
+      <div class="disc-divider-line"></div>
+      <svg class="disc-divider-disc" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="16" cy="16" rx="15" ry="7" fill="#FF6B1A" opacity="0.9"/>
+        <ellipse cx="16" cy="14" rx="7" ry="3.5" fill="#ffd090" opacity="0.5"/>
+      </svg>
+      <div class="disc-divider-line"></div>
+    </div>
+
+    <p class="section-label">About the Event</p>
+    <h2 class="section-title">Where Sport Meets<br>Community</h2>
+    <p class="section-body">
+      Join us for an exciting morning of Ultimate Frisbee, skills clinics, fun competitions, and community activities — all completely free and open to everyone. Our mission: to share the joy of frisbee with the students and families of Phnom Penh, and inspire a new generation of players across every school in the city.
+    </p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="info-card-icon" aria-hidden="true">🎯</span>
+        <div class="info-card-title">Skills Clinics</div>
+        <p class="info-card-body">Learn throwing, catching, and strategy with hands-on coaching from experienced players.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-card-icon" aria-hidden="true">🏆</span>
+        <div class="info-card-title">Mini Tournaments</div>
+        <p class="info-card-body">Teams of all ages compete in friendly, spirited matches throughout the morning.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-card-icon" aria-hidden="true">🎉</span>
+        <div class="info-card-title">Prizes & Giveaways</div>
+        <p class="info-card-body">Sponsor prizes, frisbees, school kit, and surprises for participants of all skill levels.</p>
+      </div>
+      <div class="info-card">
+        <span class="info-card-icon" aria-hidden="true">🤝</span>
+        <div class="info-card-title">Community Spirit</div>
+        <p class="info-card-body">Connecting government schools, independent schools, and international families — all on one field.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── DETAILS ────── -->
+<section class="section-details" aria-label="Event details">
+  <div class="container reveal">
+    <p class="section-label">Event Details</p>
+    <div class="details-flex">
+      <div class="detail-block">
+        <div class="detail-label">Date</div>
+        <div class="detail-value">June 6
+          <small>Friday, 2025</small>
+        </div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-label">Time</div>
+        <div class="detail-value">8AM – 12PM
+          <small>4 hours of fun</small>
+        </div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-label">Entry</div>
+        <div class="detail-value">FREE
+          <small>Open to everyone</small>
+        </div>
+      </div>
+      <div class="detail-block">
+        <div class="detail-label">Location</div>
+        <div class="detail-value" style="font-size: clamp(1.3rem, 4vw, 2.2rem);">AUPP Liger
+          <small>Phnom Penh, Cambodia</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-placeholder">
+      <p style="font-family:'Barlow Semi Condensed',sans-serif; font-size:1rem; color:rgba(240,235,220,0.7);">📍 AUPP Liger Leadership Academy, Phnom Penh</p>
+      <p class="map-addr">Phnom Penh, Kingdom of Cambodia</p>
+      <a href="https://maps.google.com/?q=AUPP+Liger+Leadership+Academy+Phnom+Penh" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Open in Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── SCHEDULE ────── -->
+<section class="section-activities" aria-label="Schedule and activities">
+  <div class="container reveal">
+    <p class="section-label">Programme</p>
+    <h2 class="section-title">Morning<br>Schedule</h2>
+
+    <div class="timeline" role="list">
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="8:00 AM">8:00<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Gates Open &amp; Registration</div>
+          <p class="tl-desc">Arrive early, collect your free frisbee, meet your team, and warm up on the field.</p>
+        </div>
+      </div>
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="8:30 AM">8:30<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Opening Ceremony &amp; Welcome</div>
+          <p class="tl-desc">Remarks from AUPP Liger leadership, sponsors, and community guests.</p>
+        </div>
+      </div>
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="9:00 AM">9:00<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Skills Clinics &amp; Drills</div>
+          <p class="tl-desc">Coached sessions for beginners — throwing, catching, and field awareness. Broken into age groups.</p>
+        </div>
+      </div>
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="10:00 AM">10:00<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Mini Tournament Begins</div>
+          <p class="tl-desc">Mixed teams from government and international schools compete in fun 5v5 matches.</p>
+        </div>
+      </div>
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="11:00 AM">11:00<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Games, Challenges &amp; Sponsor Booths</div>
+          <p class="tl-desc">Disc golf targets, accuracy contests, sponsor giveaways, and refreshments.</p>
+        </div>
+      </div>
+      <div class="timeline-item" role="listitem">
+        <div class="tl-time" aria-label="11:45 AM">11:45<br>AM</div>
+        <div class="tl-content">
+          <div class="tl-title">Awards &amp; Closing</div>
+          <p class="tl-desc">Prize giving, group photo, and celebration of sport, community, and spirit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 2.5rem;">
+      <p class="section-label">Activities on the Day</p>
+      <div class="activities-grid">
+        <div class="activity-pill"><span class="ap-dot"></span>Ultimate Frisbee</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Disc Golf</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Throwing Clinic</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Accuracy Challenge</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Team Games</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Prize Giveaways</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Sponsor Booths</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Free Refreshments</div>
+        <div class="activity-pill"><span class="ap-dot"></span>Photo Opportunities</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── WHO IT'S FOR ────── -->
+<section class="section-who" aria-label="Who the event is for">
+  <div class="container reveal">
+    <p class="section-label">Who It's For</p>
+    <h2 class="section-title">Everyone<br>Is Welcome</h2>
+    <div class="who-cards">
+      <div class="who-card primary">
+        <span class="who-card-emoji" aria-hidden="true">🏫</span>
+        <div class="who-card-title">Government Schools</div>
+        <p class="who-card-body">We are proud to bring frisbee to the students of Phnom Penh's public schools — completely free, with equipment provided. No experience needed.</p>
+      </div>
+      <div class="who-card secondary">
+        <span class="who-card-emoji" aria-hidden="true">🌏</span>
+        <div class="who-card-title">International &amp; Independent Families</div>
+        <p class="who-card-body">Parents and students from international and independent schools are warmly invited to play, connect, and discover what AUPP Liger is all about.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── ABOUT SCHOOL ────── -->
+<section class="section-school" aria-label="About AUPP Liger Leadership Academy">
+  <div class="container reveal">
+    <p class="section-label">Hosted By</p>
+    <div class="school-card">
+      <div class="school-logo-area">
+        <div class="school-logo-circle" aria-label="AUPP Liger Leadership Academy logo">
+          AUPP<br>LIGER
+        </div>
+      </div>
+      <div class="school-info">
+        <h2 class="school-name"><span>AUPP Liger</span><br>Leadership Academy</h2>
+        <p class="school-desc">
+          AUPP Liger follows a unique STEEAM curriculum integrating Science, Technology, Entrepreneurship, Engineering, Art and Math. Through project-based, experiential learning, we cultivate ethical, entrepreneurial leaders — and we believe sport is central to that mission.
+        </p>
+        <a href="https://aupplla.edu.kh/" target="_blank" rel="noopener" class="cta-btn" aria-label="Learn more about AUPP Liger Leadership Academy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Learn About the School
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ────── FOOTER ────── -->
+<footer>
+  <div class="footer-text">
+    <p>Phnom Penh Frisbee Day &nbsp;·&nbsp; Friday June 6, 2025 &nbsp;·&nbsp; 8:00 AM – 12:00 PM</p>
+    <p style="margin-top:0.4rem;">Hosted by <a href="https://aupplla.edu.kh/" target="_blank" rel="noopener">AUPP Liger Leadership Academy</a> &nbsp;·&nbsp;
+      Questions? <a href="mailto:info@ligeracademy.org">info@ligeracademy.org</a> &nbsp;·&nbsp;
+      <a href="tel:+85523231829">+855 23 231 829</a>
+    </p>
+  </div>
+</footer>
+
+
+<script>
+(function() {
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  const starCount = window.innerWidth < 600 ? 60 : 120;
+  for (let i = 0; i < starCount; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%; top:${Math.random()*70}%;
+      --op:${(Math.random()*0.6+0.2).toFixed(2)};
+      --dur:${(Math.random()*3+2).toFixed(1)}s;
+      --delay:-${(Math.random()*5).toFixed(1)}s;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  // Generate clouds
+  const cloudsEl = document.getElementById('clouds');
+  const cloudData = [
+    {w:180,h:50,top:15,dur:28,delay:0},
+    {w:260,h:70,top:22,dur:45,delay:-15},
+    {w:140,h:40,top:35,dur:35,delay:-8},
+    {w:300,h:80,top:12,dur:55,delay:-25},
+    {w:200,h:55,top:28,dur:38,delay:-35},
+  ];
+  cloudData.forEach(c => {
+    const cl = document.createElement('div');
+    cl.className = 'cloud';
+    cl.style.cssText = `
+      width:${c.w}px; height:${c.h}px;
+      top:${c.top}%; left:-250px;
+      --cdur:${c.dur}s; --cdelay:${c.delay}s;
+    `;
+    cloudsEl.appendChild(cl);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => io.observe(r));
+})();
+</script>
+</body>
+</html>
